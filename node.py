@@ -2,7 +2,7 @@ import requests
 
 # Регістрація ноди на сервері
 def register_node():
-    server_url = 'http://your-server-url.com/register'  # Заміни на реальний URL сервера
+    server_url = 'http://127.0.0.1:5000/register'  # Заміни на реальний URL сервера
     node_data = {
         'ip': '127.0.0.1',  # IP-адреса ноди
         'port': 5000        # Порт, на якому працює нода
@@ -19,9 +19,9 @@ def register_node():
 
 # Майнімо блок на ноді
 def mine_block():
-    server_url = 'http://your-server-url.com/mine'  # Заміни на реальний URL
+    server_url = 'http://127.0.0.1:5000/mine'  # Заміни на реальний URL
     try:
-        response = requests.post(server_url)
+        response = requests.get(server_url)  # Змінено на GET для майнінгу
         if response.status_code == 200:
             print("Block mined successfully!")
         else:

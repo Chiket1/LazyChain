@@ -9,7 +9,6 @@ server_url = 'http://127.0.0.1:5000/register'
 # Список для зберігання створених акаунтів
 created_nodes = []
 
-
 # Функція для створення акаунтів
 def create_node():
     node_ip = f"192.168.0.{random.randint(100, 200)}"
@@ -28,7 +27,6 @@ def create_node():
             print(f"Failed to create node: {response.status_code}")
     except Exception as e:
         print(f"Error connecting to server: {str(e)}")
-
 
 # Функція для симуляції транзакцій
 def simulate_transactions():
@@ -59,7 +57,6 @@ def simulate_transactions():
 
         time.sleep(random.randint(1, 5))  # Затримка між транзакціями
 
-
 # Функція для симуляції майнінгу блоків
 def mine_blocks():
     while True:
@@ -77,7 +74,6 @@ def mine_blocks():
 
         time.sleep(random.randint(3, 7))  # Затримка між майнінгом блоків
 
-
 # Функція для синхронізації блоків
 def sync_blocks():
     while True:
@@ -92,7 +88,6 @@ def sync_blocks():
             print(f"Error during block sync: {str(e)}")
 
         time.sleep(random.randint(5, 10))  # Затримка між синхронізаціями
-
 
 # Створюємо кілька нод і запускаємо процеси
 def start_bot():

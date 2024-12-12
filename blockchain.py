@@ -16,10 +16,10 @@ class Block:
 
 
 class Blockchain:
-    def __init__(self):
+    def __init__(self, difficulty=4):
         self.chain = [self.create_genesis_block()]
         self.transactions = []
-        self.difficulty = 4  # Proof of Work difficulty (leading zeros in the hash)
+        self.difficulty = difficulty  # Proof of Work difficulty (leading zeros in the hash)
 
     def create_genesis_block(self):
         return Block(0, "0", "Genesis Block")
@@ -64,3 +64,8 @@ class Blockchain:
                 return False
 
         return True
+
+    def display_chain(self):
+        """Display the blockchain"""
+        for block in self.chain:
+            print(f"Index: {block.index}, Hash: {block.hash}, Prev Hash: {block.previous_hash}, Transactions: {block.transactions}")

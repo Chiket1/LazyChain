@@ -1,46 +1,53 @@
-import requests
+from flask import Flask, request, jsonify
+import time
 
-# Регістрація ноди на сервері
+app = Flask(__name__)
+
+# Список для зберігання нод
+nodes = []
+
+# Список для блоків
+blocks = []
+
+# Реєстрація ноди
+@app.route('/register', methods=['POST'])
 def register_node():
-    server_url = 'http://your-server-url.com/register'  # Заміни на реальний URL сервера
-    node_data = {
-        'ip': '127.0.0.1',  # IP-адреса ноди
-        'port': 5000        # Порт, на якому працює нода
-    }
+    node_info = request.get_json()
+    if not node_info or 'ip' not in node_info or 'port' not in node_info:
+        return jsonify({"error": "Invalid node data"}), 400
+    nodes.append(node_info)
+    return jsonify({"message": "Node registered successfully", "nodes": nodes}), 201
 
-    try:
-        response = requests.post(server_url, json=node_data)
-        if response.status_code == 201:
-            print("Node successfully registered:", response.json())
-        else:
-            print("Failed to register node:", response.status_code, response.text)
-    except Exception as e:
-        print("Error connecting to the server:", str(e))
+# Отримання списку всіх нод
+@app.route('/nodes', methods=['GET'])
+def get_nodes():
+    return jsonify({"nodes": nodes}), 200
 
-# Майнімо блок на ноді
+# Винагорода ноди
+@app.route('/reward', methods=['POST'])
+def reward_node():
+    node_id = request.get_json().get('node_id')
+    reward_amount = 10  # Приклад винагороди
+    return jsonify({"message": f"Node {node_id} rewarded with {reward_amount} tokens"}), 200
+
+# Майнімо блок
+@app.route('/mine', methods=['POST'])
 def mine_block():
-    server_url = 'http://your-server-url.com/mine'  # Заміни на реальний URL
-    try:
-        response = requests.post(server_url)
-        if response.status_code == 200:
-            print("Block mined successfully!")
-        else:
-            print("Failed to mine block:", response.status_code, response.text)
-    except Exception as e:
-        print("Error connecting to the server:", str(e))
+    new_block = {
+        'index': len(blocks) + 1,
+        'timestamp': time.time(),
+        'transactions': [],
+        'proof': 100,
+        'previous_hash': blocks[-1]['hash'] if blocks else '0'
+    }
+    new_block['hash'] = f"hash-{new_block['index']}"  # Простий хеш для прикладу
+    blocks.append(new_block)
+    return jsonify({"message": "Block mined successfully", "block": new_block}), 200
 
-# Синхронізація блоків з іншими нодами
-def sync_blocks(nodes):
-    for node in nodes:
-        try:
-            response = requests.get(f'http://{node}/blocks')
-            if response.status_code == 200:
-                # Якщо є нові блоки, синхронізуємо з поточною нодою
-                new_blocks = response.json()['blocks']
-                print(f"Synced blocks from {node}.")
-        except requests.exceptions.RequestException as e:
-            print(f"Error connecting to {node}: {e}")
+# Отримати блоки
+@app.route('/blocks', methods=['GET'])
+def get_blocks():
+    return jsonify({"blocks": blocks}), 200
 
 if __name__ == "__main__":
-    register_node()
-    mine_block()
+    app.run(host='0.0.0.0', port=5000)

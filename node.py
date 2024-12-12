@@ -1,15 +1,16 @@
 import requests
 
+# URL сервера
+server_url = 'http://127.0.0.1:5000'
+
 # Регістрація ноди на сервері
 def register_node():
-    server_url = 'http://127.0.0.1:5000/register'  # Заміни на реальний URL сервера
     node_data = {
-        'ip': '127.0.0.1',  # IP-адреса ноди
-        'port': 5000        # Порт, на якому працює нода
+        'ip': '127.0.0.1',
+        'port': 5001
     }
-
     try:
-        response = requests.post(server_url, json=node_data)
+        response = requests.post(f"{server_url}/register", json=node_data)
         if response.status_code == 201:
             print("Node successfully registered:", response.json())
         else:
@@ -17,29 +18,17 @@ def register_node():
     except Exception as e:
         print("Error connecting to the server:", str(e))
 
-# Майнімо блок на ноді
+# Майнімо блок
 def mine_block():
-    server_url = 'http://127.0.0.1:5000/mine'  # Заміни на реальний URL
     try:
-        response = requests.get(server_url)  # Змінено на GET для майнінгу
+        response = requests.post(f"{server_url}/mine")
         if response.status_code == 200:
             print("Block mined successfully!")
+            print(response.json())
         else:
             print("Failed to mine block:", response.status_code, response.text)
     except Exception as e:
         print("Error connecting to the server:", str(e))
-
-# Синхронізація блоків з іншими нодами
-def sync_blocks(nodes):
-    for node in nodes:
-        try:
-            response = requests.get(f'http://{node}/blocks')
-            if response.status_code == 200:
-                # Якщо є нові блоки, синхронізуємо з поточною нодою
-                new_blocks = response.json()['blocks']
-                print(f"Synced blocks from {node}.")
-        except requests.exceptions.RequestException as e:
-            print(f"Error connecting to {node}: {e}")
 
 if __name__ == "__main__":
     register_node()

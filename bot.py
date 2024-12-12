@@ -4,10 +4,11 @@ import time
 from threading import Thread
 
 # Сервер для реєстрації нод
-server_url = 'http://127.0.0.1:5000/register'
+server_url = 'http://127.0.0.1:5000/register'  # Замінили на правильний URL
 
 # Список для зберігання створених акаунтів
 created_nodes = []
+
 
 # Функція для створення акаунтів
 def create_node():
@@ -27,6 +28,7 @@ def create_node():
             print(f"Failed to create node: {response.status_code}")
     except Exception as e:
         print(f"Error connecting to server: {str(e)}")
+
 
 # Функція для симуляції транзакцій
 def simulate_transactions():
@@ -57,6 +59,7 @@ def simulate_transactions():
 
         time.sleep(random.randint(1, 5))  # Затримка між транзакціями
 
+
 # Функція для симуляції майнінгу блоків
 def mine_blocks():
     while True:
@@ -74,6 +77,7 @@ def mine_blocks():
 
         time.sleep(random.randint(3, 7))  # Затримка між майнінгом блоків
 
+
 # Функція для синхронізації блоків
 def sync_blocks():
     while True:
@@ -89,24 +93,11 @@ def sync_blocks():
 
         time.sleep(random.randint(5, 10))  # Затримка між синхронізаціями
 
+
 # Створюємо кілька нод і запускаємо процеси
 def start_bot():
     # Створюємо кілька нод
     for _ in range(5):  # Створюємо 5 нод
         create_node()
 
-    # Запускаємо процеси для симуляції транзакцій, майнінгу та синхронізації
-    threads = []
-    threads.append(Thread(target=simulate_transactions))
-    threads.append(Thread(target=mine_blocks))
-    threads.append(Thread(target=sync_blocks))
-
-    for t in threads:
-        t.start()
-
-    for t in threads:
-        t.join()
-
-
-if __name__ == "__main__":
-    start_bot()
+    # Запускаємо процеси для симуляції транзакцій, май

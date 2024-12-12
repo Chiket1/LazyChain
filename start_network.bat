@@ -7,7 +7,7 @@ start python server.py
 :: Чекаємо 5 секунд для ініціалізації серверу
 timeout /t 5 /nobreak
 
-:: Запуск бота
+:: Запуск бота (якщо він потрібен для тестування)
 echo Starting bot...
 start python bot.py
 
@@ -18,5 +18,10 @@ for /l %%i in (1,1,5) do (
     timeout /t 1 /nobreak
 )
 
+:: Запуск клієнта (щоб тестувати взаємодію з сервером)
+echo Starting client...
+start python client.py
+
 :: Чекаємо, поки всі процеси завершаться
 pause
+
